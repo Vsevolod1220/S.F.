@@ -1,0 +1,83 @@
+print("*"*5, "Крестики-нолики", "*"*5)
+map_matrix = [[i, "-", "-", "-"] for i in range(3)]
+
+
+def board_TTC (board, rows=3, cols=4):
+    for i in range(rows):
+        for j in range(cols):
+            print(board[i][j], end=" ")
+        print()
+
+
+print()
+print(" ", 1, 2, 3)
+board_TTC (map_matrix)
+print()
+start = input("Старт, выберите символ: (x/o): ")
+
+
+def state_winner(board):
+    for row in board:
+        if row[1] == row[2] == row[3] and row[1] != "-":
+            return row[1]
+
+    for col in range(1, 4):
+        if board[0][col] == board[1][col] == board[2][col] and board[0][col] != "-":
+            return board[0][col]
+
+    if board[0][1] == board[1][2] == board[2][3] and board[0][1] != "-":
+        return board[0][1]
+    if board[0][3] == board[1][2] == board[2][1] and board[0][3] != "-":
+        return board[0][3]
+
+    return None
+def func_beg(start_symbol):
+    global game_map
+    count = 0
+    while True:
+        if start_symbol == "x":
+            step1 = int(input(f"Укажите выбранную вами координату по вертикали от 0 до 2-ух для '{start_symbol}': "))
+            step2 = int(input(f"Укажите выбранную вами координату по горизонтали от 1 до 3-ёх для '{start_symbol}': "))
+            if (step1 < 0 or step1 > 2) or (step2 < 1 or step2 > 3):
+                print("Введите другие координаты ")
+            else:
+                if map_matrix[step1][step2] == "-":
+                    map_matrix[step1][step2] = start_symbol
+                    print("Тек. состояние: ")
+                    print(" ", 1, 2, 3)
+                    board_TTC (map_matrix)
+                    start_symbol = "o"
+                else:
+                    print("Выбранная вами позиция уже занята, поопробуйте другую")
+        elif start_symbol == "o":
+            step1 = int(input(f"Введите координату по горизонтали от 0 до 2-ух для '{start_symbol}': "))
+            step2 = int(input(f"Введите координату по вертикали от 1 до 3-ёх для '{start_symbol}': "))
+            if (step1 < 0 or step1 > 2) or (step2 < 1 or step2 > 3):
+                print("Введите другие координаты ")
+            else:
+                if map_matrix[step1][step2] == "-":
+                    map_matrix[step1][step2] = start_symbol
+                    print(" ", 1, 2, 3)
+                    board_TTC (map_matrix)
+                    start_symbol = "x"
+                else:
+                    print("Выбранная вами позиция уже занята, поопробуйте другую")
+        state_winner(map_matrix)
+        if state_winner(map_matrix) == "x":
+            print("Конец игры: Победа крестиков")
+            break
+        elif state_winner(map_matrix) == "o":
+            print("Конец игры: Победа оликов")
+            break
+        count += 1
+        if count == 9:
+            print("Ничья")
+            break
+
+
+if start == "x":
+    func_beg("x")
+elif start == "o":
+    func_beg("o")
+else:
+    print('')
